@@ -1,0 +1,85 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model LanguageProfile {
+  id          String   @id @default(cuid())
+  code        String   @unique
+  label       String
+  markets     String
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model PlatformAccount {
+  id             String    @id @default(cuid())
+  platform       String
+  accountName    String
+  status         String
+  oauthStatus    String
+  region         String?
+  lastSyncAt     DateTime?
+  connectedSince DateTime? @default(now())
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@unique([platform, accountName])
+}
+
+model AgentTask {
+  id          String    @id @default(cuid())
+  identifier  String    @unique
+  title       String
+  description String
+  state       String
+  priority    String
+  agentName   String
+  modelUsed   String?
+  createdAt   DateTime  @default(now())
+  finishedAt  DateTime?
+  result      String?
+  errors      String?
+}
+
+model Opportunity {
+  id            String   @id @default(cuid())
+  slug          String   @unique
+  name          String
+  score         Int
+  state         String
+  market        String
+  competition   String
+  profitability Float
+  sources       String
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model ModelRegistry {
+  id          String   @id @default(cuid())
+  provider    String
+  modelName   String
+  tier        Int
+  localOnly   Boolean  @default(false)
+  status      String
+  hardwareFit String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model AnalyticsSnapshot {
+  id        String   @id @default(cuid())
+  period    String
+  views     Int
+  followers Int
+  revenue   Float
+  expenses  Float
+  netProfit Float
+  createdAt DateTime @default(now())
+}
